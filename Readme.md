@@ -4,7 +4,7 @@
 
 ### Live Demo :- [https://chat-app-vercel.app](https://chat-app-greatstack.vercel.app/)
 
-![chat-app Home Page](../chat-app/public/home_page.jpg) <!-- Replace with actual screenshot -->
+![chat-app Home Page](../../public/home_page.jpg) <!-- Replace with actual screenshot -->
 
 ## ✨ Features
 
