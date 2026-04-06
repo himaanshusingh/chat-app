@@ -1,6 +1,8 @@
-# 💬 Realtime Chat App: A feature-rich, real-time messaging application that allows users to communicate instantly. Built with modern web technologies for seamless, low-latency communication.
+## 💬 Realtime Chat App:
 
-### Also try -> [https://chat-app-vercel.app](https://chat-app-greatstack.vercel.app/)
+### A feature-rich, real-time messaging application that allows users to communicate instantly. Built with modern web technologies for seamless, low-latency communication.
+
+### Live Demo :- [https://chat-app-vercel.app](https://chat-app-greatstack.vercel.app/)
 
 ![chat-app Home Page](https://github.com/user-attachments/assets/8fab7e66-30d7-4cde-b899-467d6a4c9fc6) <!-- Replace with actual screenshot -->
 
@@ -42,7 +44,7 @@ git clone https://github.com/himaanshusingh/chat-app.git
 ```
 
 ```bash
-cd realtime-chat-app
+cd chat-app
 ```
 
 ### Install dependencies for frontend and backend separately
@@ -104,7 +106,7 @@ user_online Server → Broadcast online status
 
 ### 📁 Project Structure
 
-text
+```bash
 realtime-chat-app/
 ├── backend/
 │ ├── models/ # User, Message, Room schemas
@@ -121,16 +123,18 @@ realtime-chat-app/
 │ │ └── pages/ # Login, Register, Dashboard
 │ └── public/
 └── README.md
-🧪 Running Tests
+```
 
-# Backend tests (Jest / Mocha)
+## 🧪 Running Tests
+
+### Backend tests (Jest / Mocha)
 
 ```bash
 cd backend
 npm test
 ```
 
-# Frontend tests (React Testing Library)
+### Frontend tests (React Testing Library)
 
 ```bash
 cd frontend
@@ -159,6 +163,6 @@ Open a Pull Request.
 **📄 License**
 Distributed under the MIT License. See LICENSE for more information.
 
-## Authors
+## Author
 
 - [@HimanshuSingh](https://github.com/himaanshusingh)
