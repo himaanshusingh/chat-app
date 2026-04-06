@@ -13,6 +13,7 @@ import RecieverMessage from './RecieverMessage';
 import { serverUrl } from '../main';
 import axios from 'axios';
 import {  setMessages } from '../redux/messageSlice';
+
 function MessageArea() {
   let {selectedUser,userData} = useSelector(state=>state.user)
   let navigate = useNavigate()
