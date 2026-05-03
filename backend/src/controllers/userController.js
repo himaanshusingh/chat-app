@@ -7,6 +7,7 @@ import { v2 as cloudinary } from "cloudinary";
 import userModel from "../models/userModel.js";
 import { JWT_SECRET } from "../config/envConfig.js";
 
+
 // Controller to signup a user :-
 export async function signup(req, res) {
   const { fullName, email, password, bio } = req.body;
