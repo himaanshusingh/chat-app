@@ -1,28 +1,36 @@
-import { useState } from 'react'
+import { useContext } from "react";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
+import { AuthContext } from "./context/AuthContext";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import Profile from "./pages/Profile";
 
-import { Navigate, Route, Routes } from 'react-router-dom';
-import Login from './Pages/Login';
-import SignUp from './Pages/SignUp';
-import getCurrentUser from './customHooks/getCurrentUser';
-import { useSelector } from 'react-redux';
-import Home from './Pages/Home';
-import Profile from './Pages/Profile';
+const App = () => {
+  const { authUser } = useContext(AuthContext);
+  console.log(authUser);
 
-import getOtherUsers from './customHooks/getOtherUsers';
-
-
-function App() {
-    getCurrentUser()
-    getOtherUsers()
-    let {userData} = useSelector(state=> state.user)
   return (
-    <Routes>
-      <Route path='/login' element={!userData?<Login/>:<Navigate to="/"/>}/>
-      <Route path='/signup' element={!userData?<SignUp/>:<Navigate to="/profile"/>}/>
-      <Route path='/' element={userData?<Home/>:<Navigate to="/login"/>}/>
-      <Route path='/profile' element={userData?<Profile/>:<Navigate to="/signup"/>}/>
-    </Routes>
-  )
-}
+    <div className="bg-[url('./src/assets/bgImage.svg')] bg-cover bg-no-repeat position">
+      <BrowserRouter>
+        <Toaster />
+        <Routes>
+          <Route
+            path="/"
+            element={authUser ? <Home /> : <Navigate to={"/login"} />}
+          />
+          <Route
+            path="/login"
+            element={!authUser ? <Login /> : <Navigate to={"/"} />}
+          />
+          <Route
+            path="/profile"
+            element={authUser ? <Profile /> : <Navigate to={"/login"} />}
+          />
+        </Routes>
+      </BrowserRouter>
+    </div>
+  );
+};
 
-export default App
+export default App;

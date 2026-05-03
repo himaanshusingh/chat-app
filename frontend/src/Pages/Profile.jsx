@@ -1,70 +1,91 @@
-import  { useRef, useState } from 'react'
-import dp from "../assets/dp.jpg"
-import { IoIosCamera } from "react-icons/io";
-import { useDispatch, useSelector } from 'react-redux';
-import { GoArrowLeft } from "react-icons/go";
-import { useNavigate } from 'react-router-dom';
-import { serverUrl } from '../main';
-import { setUserData } from '../redux/userSlice';
-import axios from 'axios';
-function Profile() {
-    let {userData} = useSelector(state=> state.user)
-    let navigate = useNavigate()
-    let [name,setName] = useState(userData.name || "")
-    let [frontImage,setFrontImage] = useState(userData?.image || dp)
-    let [backendImage,setBackendImage] = useState(null)
-    let image = useRef()
-    let dispatch = useDispatch()
-    let [saving,setSaving] = useState(false);
-    const handleImage = (e)=>{
-        let file = e.target.files[0];
-        setBackendImage(file);
-        setFrontImage(URL.createObjectURL(file))
-    }
-    const handleSubmit= async (e)=>{
-        e.preventDefault();
-        setSaving(true);
-        try {
-            let formData = new FormData()
-            formData.append("name",name)
-            if(backendImage){
-                formData.append("image",backendImage);
-            }
-            let result = await axios.put(`${serverUrl}/api/user/profile`,formData,{
-              withCredentials: true
-              
-            });
-            setSaving(false);
-            dispatch(setUserData(result.data));
-           
-            console.log(result.data)
-            
-        } catch (error) {
-            console.log(error);
-            setSaving(false)
-        }
-    }
-  return (
-    <div className='w-full h-[100vh] bg-slate-200 flex flex-col justify-center items-center gap-[20px]'>
-        <div className='fixed top-[20px] left-[20px]'>
-            <GoArrowLeft className='w-[30px] h-[30px] text-gray-500 ' onClick={()=> navigate("/")}/>
-        </div>
-      <div className=' bg-white rounded-full border-2 border-blue-400 shadow-gray-400 shadow-lg overflow-hidden relative gap-[20px]'onClick={()=>image.current.click()}>
-        <div className='w-[200px] h-[200px] rounded-full overflow-hidden'>
-            <img src={frontImage} alt="" />
-        </div>
-        <IoIosCamera className='absolute w-[25px] h-[25px] bottom-8 right-5 cursor-pointer hover:w-[30px] hover:h-[30px]'/>
-      </div>
-      <form className='w-[95%] max-w-[500px] flex flex-col gap-[20px] items-center justify-center'onSubmit={handleSubmit}>
-        <input type='file' accept='image/*' ref={image} hidden onChange={handleImage}/>
-        <input type='text' placeholder='Enter your name' className='w-[90%] h-[50px] border-2 border-[#bfdbfe] px-[20px] py-[20px] bg-white outline-none rounded-lg shadow-gray-200' onChange={(e)=>setName(e.target.value)} value={name}/>
-        <input type='text' readOnly className='w-[90%] h-[50px] text-gray-400 border-2 border-[#bfdbfe] px-[20px] py-[20px] bg-white outline-none rounded-lg shadow-gray-200'value={userData?.userName}/>
-        <input type='email' readOnly className='w-[90%] h-[50px] text-gray-400 border-2 border-[#bfdbfe] px-[20px] py-[20px] bg-white outline-none rounded-lg shadow-gray-200'value={userData?.email}/>
-        <button className='px-[20px] py-[20px] bg-blue-500 shadow-gray-400 
-                shadow-lg  rounded-2xl text-[20px] mt-[20px] font-semibold hover:shadow-inner' disabled={saving}>{saving?"saving...":"Save Profile"}</button> 
-      </form>
-    </div>
-  )
-}
+import { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import assets from "../assets/assets";
+import { AuthContext } from "../context/AuthContext";
 
-export default Profile
+const Profile = () => {
+  const { authUser, updateProfile } = useContext(AuthContext);
+  console.log(authUser);
+  const navigate = useNavigate();
+
+  const [selectedImg, setSelectedImg] = useState(null);
+  const [name, setName] = useState(authUser?.fullName);
+  const [bio, setBio] = useState(authUser?.bio);
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    if (!selectedImg) {
+      await updateProfile({ fullName: name, bio });
+      return navigate("/");
+    }
+    const reader = new FileReader();
+    reader.readAsDataURL(selectedImg);
+    reader.onload = async () => {
+      const base64Image = reader.result;
+      await updateProfile({ profilePic: base64Image, fullName: name, bio });
+    };
+  }
+
+  return (
+    <div className="min-h-screen bg-cover bg-no-repeat flex items-center justify-center">
+      <div className="w-5/6 max-w-2xl backdrop-blur-2xl text-gray-300 border-2 border-gray-600 flex items-center justify-between max-sm:flex-col-reverse rounded-lg">
+        <form
+          onSubmit={handleSubmit}
+          className="flex flex-col gap-5 p-10 flex-1"
+        >
+          <h3 className="text-lg">Profile Details</h3>
+          <label
+            htmlFor="avatar"
+            className="flex items-center gap-3 cursor-pointer"
+          >
+            <input
+              hidden
+              type="file"
+              id="avatar"
+              accept=".png, .jpg, .jpeg"
+              onChange={(e) => setSelectedImg(e.target.files[0])}
+            />
+            <img
+              src={
+                selectedImg
+                  ? URL.createObjectURL(selectedImg)
+                  : assets.avatar_icon
+              }
+              className={`w-12 h-12 ${selectedImg && "rounded-full"}`}
+            />
+            Upload Profile Image
+          </label>
+
+          <input
+            required
+            type="text"
+            value={name}
+            placeholder="Your name"
+            onChange={(e) => setName(e.target.value)}
+            className="p-2 border border-gray-500 rounded-md focus:outline-none focus:ring-2 focus:ring-violet-500"
+          />
+
+          <textarea
+            rows={4}
+            required
+            value={bio}
+            placeholder="Write profile Bio"
+            onChange={(e) => setBio(e.target.value)}
+            className="p-2 border border-gray-500 rounded-md focus:outline-none focus:ring-2 focus:ring-violet-500"
+          ></textarea>
+
+          <button className="bg-linear-to-r from-purple-400 to-violet-600 text-white p-2 rounded-full text-lg cursor-pointer">
+            Save
+          </button>
+        </form>
+
+        <img
+          src={authUser?.profilePic || assets.logo_icon}
+          className={`max-w-44 aspect-square rounded-full mx-10 max-sm:mt-10 ${selectedImg && "rounded-full"}`}
+        />
+      </div>
+    </div>
+  );
+};
+
+export default Profile;

@@ -1,62 +1,129 @@
-import axios from 'axios';
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { serverUrl } from '../main';
-import { useDispatch, useSelector } from 'react-redux';
-import { setSelectedUser, setUserData } from '../redux/userSlice';
+import { useContext, useState } from "react";
+import assets from "../assets/assets";
+import { AuthContext } from "../context/AuthContext";
 
-function Login() {
-  let navigate = useNavigate();
-    let [show,setShow] = useState(false);
-    let [email,setEmail] = useState("");
-    let [password,setPassword] = useState("");
-    let [loading,setLoading] = useState(false);
-    let [err,setErr] = useState("");
-    let dispatch = useDispatch();
-   
+const Login = () => {
+  const [currentState, setCurrentState] = useState("Sign Up");
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [bio, setBio] = useState("");
+  const [isDataSubmitted, setIsDataSubmitted] = useState(false);
 
-    const handleLogin = async (e)=>{
-      e.preventDefault();
-      setLoading(true);
-      try {
-        let result = await axios.post(`${serverUrl}/api/auth/login`,
-          {email,password},
-          {withCredentials:true});
-        console.log(result); 
-        dispatch(setUserData(result.data))
-        dispatch(setSelectedUser(null))
-        setEmail("");
-        setPassword("");
-        setLoading(false);
-        setErr("");
-        navigate("/")
-      } catch (error) {
-        console.log(error);
-        setLoading(false);
-        setErr(error.result.data.message);
-      }
+  const { login } = useContext(AuthContext);
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    if (currentState == "Sign Up" && !isDataSubmitted) {
+      return setIsDataSubmitted(true);
     }
-  return (
-    <div className='w-full h-full bg-slate-200 flex items-center justify-center'>
-      <div  className='w-full max-w-[500px] h-[600px] bg-white rounded-2lg  shadow-gray-400 shadow-lg flex flex-col gap-[10px]'>
-            <div className='w-full h-[200px] bg-blue-400 rounded-b-[30%]   shadow-gray-400 shadow-lg flex items-center justify-center'>
-                <h1 className='text-gray-700 font-bold text-[30px]'>Login to <span className='text-white'>CHATLY</span></h1>
-            </div>
-            <form className='w-full flex flex-col gap-[20px] items-center' onSubmit={handleLogin}>
-                
-                <input type='email' placeholder='email' className='w-[90%] h-[50px] border-2 border-[#bfdbfe] px-[20px] py-[20px] bg-white outline-none rounded-lg shadow-gray-200' onChange={(e)=>setEmail(e.target.value)} value={email}/>
-                <div className='w-[90%] h-[50px] overflow-hidden border-2 border-[#bfdbfe] rounded-lg  shadow-gray-200 shadow-lg relative'>
-                    <input type={`${show?"text":"password"}`} placeholder='password' className='w-full h-full   px-[20px] py-[20px] bg-white outline-none'onChange={(e)=>setPassword(e.target.value)} value={password}/>
-                    <span className='absolute top-[10px] right-[10px] text-[20px] font-bold text-blue-400 cursor-pointer' onClick={()=> setShow(prev=>!prev)}>{show?"hidden":"show"}</span>
-                </div>
-                {err && <p className='text-red-500'>{err}</p>}
-                <button className='px-[20px] py-[20px] bg-blue-500 shadow-gray-400 
-                shadow-lg  rounded-2xl text-[20px] mt-[20px] font-semibold hover:shadow-inner w-[200px]'disabled={loading}>{loading?"Loading...":"Login"}</button>
-                <p className='cursor-pointer' onClick={()=> navigate("/signup")}>Want to create Account ? <span className='text-blue-400 font-bold'>signUp</span></p>
-            </form>
-      </div>
-    </div>
-  )
-}
+    const credentials = { fullName, email, password, bio };
+    login(currentState == "Sign Up" ? "signup" : "login", credentials);
+  }
 
-export default Login
+  return (
+    <div className="min-h-screen bg-cover bg-center flex items-center justify-center gap-8 sm:justify-evenly max-sm:flex-col backdrop-blur-2xl">
+      {/* left */}
+      <img src={assets.logo_big} className="w-[min(30vw,250px)]" />
+
+      {/* right */}
+      <form
+        onSubmit={handleSubmit}
+        className="border-2 bg-white/8 text-white border-gray-500 p-6 flex flex-col gap-6 rounded-lg shadow-lg"
+      >
+        <h2 className="font-medium text-2xl flex justify-between items-center">
+          {currentState}
+          {isDataSubmitted && (
+            <img
+              src={assets.arrow_icon}
+              className="w-5 cursor-pointer"
+              onClick={() => setIsDataSubmitted(false)}
+            />
+          )}
+        </h2>
+
+        {currentState === "Sign Up" && !isDataSubmitted && (
+          <input
+            required
+            type="text"
+            value={fullName}
+            placeholder="Full Name"
+            onChange={(e) => setFullName(e.target.value)}
+            className="p-2 border border-gray-500 rounded-md focus:outline-none"
+          />
+        )}
+
+        {!isDataSubmitted && (
+          <>
+            <input
+              required
+              type="email"
+              value={email}
+              placeholder="Email address"
+              onChange={(e) => setEmail(e.target.value)}
+              className="p-2 border border-gray-500 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+
+            <input
+              required
+              type="password"
+              value={password}
+              placeholder="Password"
+              onChange={(e) => setPassword(e.target.value)}
+              className="p-2 border border-gray-500 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+          </>
+        )}
+
+        {currentState === "Sign Up" && isDataSubmitted && (
+          <textarea
+            rows={4}
+            required
+            value={bio}
+            placeholder="Provide a short bio..."
+            onChange={(e) => setBio(e.target.value)}
+            className="p-2 border border-gray-500 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          ></textarea>
+        )}
+
+        <button
+          type="submit"
+          className="py-3 bg-linear-to-r from-purple-400 to-violet-600 text-white rounded-md cursor-pointer"
+        >
+          {currentState === "Sign Up" ? "Create Account" : "Login Now"}
+        </button>
+
+        <div className="flex items-center gap-2 text-sm text-gray-500">
+          <input type="checkbox" />
+          <p>Agree to the terms of use & privacy policy.</p>
+        </div>
+
+        <div className="flex flex-col gap-2">
+          {currentState === "Sign Up" ? (
+            <p className="text-sm text-gray-600">
+              Already Have an account? &nbsp;
+              <span
+                onClick={() => setCurrentState("Login")}
+                className="font-medium text-violet-500 cursor-pointer"
+              >
+                Login Here
+              </span>
+            </p>
+          ) : (
+            <p className="text-sm text-gray-600">
+              Create an account? &nbsp;
+              <span
+                onClick={() => setCurrentState("Sign Up")}
+                className="font-medium text-violet-500 cursor-pointer"
+              >
+                Click Here
+              </span>
+            </p>
+          )}
+        </div>
+      </form>
+    </div>
+  );
+};
+
+export default Login;
