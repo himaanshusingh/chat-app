@@ -11,7 +11,7 @@ const App = () => {
   console.log(authUser);
 
   return (
-    <div className="bg-[url('./src/assets/bgImage.svg')] bg-cover bg-no-repeat position">
+    <div className="bg-[url('/bgImage.svg')] bg-cover bg-no-repeat position">
       <BrowserRouter>
         <Toaster />
         <Routes>

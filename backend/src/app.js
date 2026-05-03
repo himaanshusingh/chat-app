@@ -49,4 +49,9 @@ app.get("/", (req, res) => res.send("API is running..."));
 app.use("/api/auth", userRouter);
 app.use("/api/messages", messageRouter);
 
-server.listen(PORT, () => console.log(`Server is running on PORT: ${PORT}`));
+if (process.env.NODE_ENV !== "production") {
+  server.listen(PORT, () => console.log(`Server is running on PORT: ${PORT}`));
+}
+
+// Export server for vercel
+export default server;
