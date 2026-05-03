@@ -80,7 +80,7 @@ const ChatProvider = ({ children }) => {
     return () => unsubscribeFromMessages();
   }, [socket, selectedUser]);
 
-  const value = { users, getUsers, messages, setMessages, selectedUser, setSelectedUser, sendMessage, unseenMessages, setUnseenMessages }; // prettier-ignore
+  const value = { users, getUsers, messages, setMessages, getMessages, selectedUser, setSelectedUser, sendMessage, unseenMessages, setUnseenMessages }; // prettier-ignore
 
   return <ChatContext.Provider value={value}>{children}</ChatContext.Provider>;
 };
