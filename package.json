@@ -2,12 +2,12 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
+  "main": "backend/src/app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "npm install --prefix frontend && npm run build --prefix frontend",
-    "dev": "nodemon app.js",
-    "start": "node app.js"
+    "build": "npm install --prefix frontend --include=dev && npm run build --prefix frontend",
+    "dev": "nodemon backend/src/app.js",
+    "start": "node backend/src/app.js"
   },
   "keywords": [],
   "author": "",
