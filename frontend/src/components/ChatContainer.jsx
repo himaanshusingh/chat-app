@@ -1,9 +1,9 @@
 import { useContext, useEffect, useRef, useState } from "react";
-import assets from "../assets/assets";
-import { formatMessageTime } from "../lib/utils";
-import { AuthContext } from "../context/AuthContext";
-import { ChatContext } from "../context/ChatContext";
 import toast from "react-hot-toast";
+import assets from "../assets/assets.js";
+import { formatMessageTime } from "../lib/utils.js";
+import { AuthContext } from "../context/AuthContext.jsx";
+import { ChatContext } from "../context/ChatContext.jsx";
 
 const ChatContainer = () => {
   const { authUser, onlineUsers } = useContext(AuthContext);
