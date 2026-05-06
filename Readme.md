@@ -2,7 +2,7 @@
 
 ### A feature-rich, real-time messaging application that allows users to communicate instantly. Built with modern web technologies for seamless, low-latency communication.
 
-### Live Demo :- [https://chat-app-vercel.app](https://chat-app-greatstack.vercel.app/)
+### Live Demo :- [https://chat-app-vercel.app](https://chat-app-b70s.onrender.com)
 
 ![chat-app Home Page](https://github.com/himaanshusingh/chat-app/blob/main/frontend/public/login_page.jpg)
 
