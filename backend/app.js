@@ -6,6 +6,7 @@ import { Server } from "socket.io";
 // Built-in Modules :-
 import http from "http";
 import path from "path";
+import { fileURLToPath } from "url";
 
 // Local Modules :-
 import { PORT } from "./config/envConfig.js";
@@ -49,9 +50,10 @@ app.use("/api/auth", userRouter);
 app.use("/api/messages", messageRouter);
 
 if (process.env.NODE_ENV === "production") {
-  const __dirname = path.resolve();
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = path.dirname(__filename);
   app.use(express.static(path.join(__dirname, "../frontend/dist")));
-  app.get("/{*splat}", (req, res) => {
+  app.get("*", (req, res) => {
     res.sendFile(path.resolve(__dirname, "../frontend", "dist", "index.html"));
   });
 } else {
