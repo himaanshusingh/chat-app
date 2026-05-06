@@ -5,6 +5,7 @@ import { Server } from "socket.io";
 
 // Built-in Modules :-
 import http from "http";
+import path from "path";
 
 // Local Modules :-
 import { PORT } from "./config/envConfig.js";
@@ -16,6 +17,14 @@ import messageRouter from "./routes/messageRoutes.js";
 // Create express app and http server :-
 const app = express();
 const server = http.createServer(app);
+
+// Middleware setup :-
+app.use(cors());
+app.use(express.json({ limit: "4mb" }));
+
+// Initialise connections :-
+connectDb();
+connectCloudinary();
 
 // Initialize socket.io server :-
 export const io = new Server(server, { cors: { origin: "*" } });
@@ -35,23 +44,18 @@ io.on("connection", (socket) => {
   });
 });
 
-// Middleware setup :-
-app.use(cors());
-app.use(express.json({ limit: "4mb" }));
-
-// Initialise connections :-
-connectDb();
-connectCloudinary();
-
-// To check the api status :-
-app.get("/", (req, res) => res.send("API is running..."));
-
+// Routes to use api :-
 app.use("/api/auth", userRouter);
 app.use("/api/messages", messageRouter);
 
-if (process.env.NODE_ENV !== "production") {
-  server.listen(PORT, () => console.log(`Server is running on PORT: ${PORT}`));
+if (process.env.NODE_ENV === "production") {
+  const __dirname = path.resolve();
+  app.use(express.static(path.join(__dirname, "../frontend/dist")));
+  app.get("/{*splat}", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "../frontend", "dist", "index.html"));
+  });
+} else {
+  app.get("/", (req, res) => res.send("API is running..."));
 }
 
-// Export express app for vercel
-export default app;
+server.listen(PORT, () => console.log(`Server is running on PORT: ${PORT}`));
