@@ -10,8 +10,6 @@
 
 - **Real-time messaging** – Instant message delivery using WebSockets.
 - **User authentication** – Sign up / login with JWT or session-based auth.
-- **Private & group chats** – One-to-one conversations or create group rooms.
-- **Typing indicators** – See when someone is typing.
 - **Online / offline status** – Know who’s currently active.
 - **Message history** – Persistent storage with scroll-back.
 - **File sharing** – Send images, documents, or emojis (optional).
@@ -25,9 +23,9 @@
 | Frontend       | React + Tailwind CSS / Material UI                    |
 | Backend        | Node.js + Express                                     |
 | Real-time      | Socket.io (WebSockets)                                |
-| Database       | MongoDB (with Mongoose) or PostgreSQL                 |
+| Database       | MongoDB (with Mongoose)               |
 | Authentication | JSON Web Tokens (JWT) + bcrypt                        |
-| Deployment     | Docker, Vercel (frontend), Heroku / Railway (backend) |
+| Deployment     | Docker, Vercel (frontend), Heroku / Render (backend) |
 
 ## 📦 Installation
 
@@ -55,7 +53,7 @@ cd chat-app
 
 ```bash
 cd backend
-cp .env.example .env          # Configure your environment variables
+cp .env.sample .env          # Configure your environment variables
 npm install
 npm run dev                   # Starts server on http://localhost:3000
 ```
@@ -74,17 +72,18 @@ npm start                     # Runs on http://localhost:5173
 Create a .env file in the backend folder:
 
 ```bash
-PORT=5000
-MONGO_URI=mongodb://localhost:27017/chatapp
-JWT_SECRET=your_super_secret_key
-CLIENT_URL=http://localhost:3000
+PORT =
+MONGODB_URI =
+JWT_SECRET =
+CLOUDINARY_NAME =
+CLOUDINARY_API_KEY =
+CLOUDINARY_API_SECRET =
 ```
 
 For the frontend (React example):
 
 ```bash
-REACT_APP_API_URL=http://localhost:5173
-REACT_APP_SOCKET_URL=http://localhost:5173
+VITE_BACKEND_URL = 'http://localhost:3000'
 ```
 
 ### 🚀 Usage
@@ -109,19 +108,28 @@ user_online Server → Broadcast online status
 ```bash
 realtime-chat-app/
 ├── backend/
-│ ├── models/ # User, Message, Room schemas
-│ ├── controllers/ # Auth, message handlers
-│ ├── routes/ # API endpoints
-│ ├── socket/ # Socket.io event handlers
-│ ├── middleware/ # Auth middleware
-│ └── server.js
-├── frontend/
+│ ├── node_modules/
 │ ├── src/
+│ │ ├── config/ # env, mongodb, cloudinary configurations
+│ │ ├── models/ # User, Message, Room schemas
+│ │ ├── routes/ # API endpoints
+│ │ ├── middlewares/ # Auth middleware
+│ │ └── controllers/ # Auth, message handlers
+│ ├── .env # environment variables
+│ └── app.js # set socket.io and creating express app
+├── frontend/
+│ ├── node_modules/
+│ ├── public/
+│ ├── src/
+│ │ ├── assets/ # images, assets.js etc.
 │ │ ├── components/ # ChatWindow, Message, Sidebar, etc.
 │ │ ├── context/ # Socket or Auth context
-│ │ ├── hooks/ # useSocket, useAuth
-│ │ └── pages/ # Login, Register, Dashboard
-│ └── public/
+│ │ ├── lib/ # utils.js
+│ │ ├── pages/ # Login, Register, Dashboard
+│ │ ├── App.jsx
+│ │ ├── index.css
+│ │ └── main.jsx
+│ └── .env
 └── README.md
 ```
 
