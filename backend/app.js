@@ -9,11 +9,11 @@ import path from "path";
 import { fileURLToPath } from "url";
 
 // Local Modules :-
-import { PORT } from "./config/envConfig.js";
-import connectDb from "./config/mongodb.js";
-import connectCloudinary from "./config/cloudinary.js";
-import userRouter from "./routes/userRoutes.js";
-import messageRouter from "./routes/messageRoutes.js";
+import { PORT } from "./src/config/envConfig.js";
+import connectDb from "./src/config/mongodb.js";
+import connectCloudinary from "./src/config/cloudinary.js";
+import userRouter from "./src/routes/userRoutes.js";
+import messageRouter from "./src/routes/messageRoutes.js";
 
 // Create express app and http server :-
 const app = express();

@@ -2,15 +2,15 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "",
-  "main": "backend/app.js",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "npm install && npm install --prefix frontend --include=dev && npm run build --prefix frontend",
-    "dev": "nodemon backend/app.js",
-    "start": "node backend/app.js"
+    "dev": "nodemon app.js",
+    "start": "node app.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "Himanshu Singh",
   "license": "ISC",
   "type": "module",
   "dependencies": {
