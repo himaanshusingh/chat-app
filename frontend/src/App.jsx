@@ -8,7 +8,6 @@ import Profile from "./pages/Profile.jsx";
 
 const App = () => {
   const { authUser } = useContext(AuthContext);
-  console.log(authUser);
 
   return (
     <div className="bg-[url('/bgImage.svg')] bg-cover bg-no-repeat position">

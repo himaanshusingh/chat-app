@@ -5,7 +5,6 @@ import { AuthContext } from "../context/AuthContext";
 
 const Profile = () => {
   const { authUser, updateProfile } = useContext(AuthContext);
-  console.log(authUser);
   const navigate = useNavigate();
 
   const [selectedImg, setSelectedImg] = useState(null);
